@@ -1,67 +1,101 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meeting & Exam Conflict Tracker</title>
-  <!-- 引入 Tailwind CSS 快速排版 -->
+  <title>Conflict Tracker</title>
+  <!-- Load Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* iOS System Font & Smoothness */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #F2F2F7; /* iOS system background color */
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    /* Smooth transition for inputs */
+    input, select, textarea {
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    
+    /* iOS style focus ring */
+    input:focus, select:focus, textarea:focus {
+      border-color: #007AFF;
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+    }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen flex items-center justify-center p-4">
 
-  <div class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
-    <h2 class="text-2xl font-bold mb-6 text-gray-800">🗓️ 考试/冲突记录表</h2>
+  <!-- iOS Card Style -->
+  <div class="bg-white p-6 sm:p-8 rounded-[28px] shadow-sm max-w-md w-full border border-gray-100">
+    
+    <div class="text-center mb-7">
+      <h2 class="text-2xl font-semibold text-gray-900 tracking-tight">Tracker</h2>
+      <p class="text-sm text-gray-500 mt-1">Record your exam conflicts</p>
+    </div>
     
     <form id="trackerForm" class="space-y-4">
       
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Name (姓名)</label>
-        <input type="text" id="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2">
+      <div class="space-y-1.5">
+        <label class="block text-[13px] font-medium text-gray-600 ml-1">Name</label>
+        <input type="text" id="name" required class="w-full rounded-[14px] bg-gray-50 border border-gray-200 px-4 py-3 text-gray-900 focus:bg-white placeholder-gray-400 text-sm" placeholder="John Doe">
       </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Exam Type (考试类型)</label>
-        <select id="examType" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2">
-          <option value="Test 1">Test 1</option>
-          <option value="Test 2">Test 2</option>
-          <option value="Quiz">Quiz</option>
-          <option value="Final">Final</option>
-          <option value="Others/Retest....">Others/Retest</option>
-        </select>
+      <div class="space-y-1.5">
+        <label class="block text-[13px] font-medium text-gray-600 ml-1">Exam Type</label>
+        <div class="relative">
+          <select id="examType" required class="appearance-none w-full rounded-[14px] bg-gray-50 border border-gray-200 px-4 py-3 text-gray-900 focus:bg-white pr-8 text-sm">
+            <option value="Test 1">Test 1</option>
+            <option value="Test 2">Test 2</option>
+            <option value="Quiz">Quiz</option>
+            <option value="Final">Final</option>
+            <option value="Others/Retest....">Others/Retest</option>
+          </select>
+          <!-- Custom subtle dropdown arrow -->
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+        </div>
       </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Course Code / Subject (科目)</label>
-        <input type="text" id="courseCode" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2">
+      <div class="space-y-1.5">
+        <label class="block text-[13px] font-medium text-gray-600 ml-1">Course Code / Subject</label>
+        <input type="text" id="courseCode" required class="w-full rounded-[14px] bg-gray-50 border border-gray-200 px-4 py-3 text-gray-900 focus:bg-white placeholder-gray-400 text-sm" placeholder="e.g. CS101">
       </div>
 
       <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Exam Date (日期)</label>
-          <input type="date" id="examDate" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2">
+        <div class="space-y-1.5">
+          <label class="block text-[13px] font-medium text-gray-600 ml-1">Date</label>
+          <input type="date" id="examDate" required class="w-full rounded-[14px] bg-gray-50 border border-gray-200 px-4 py-3 text-gray-900 focus:bg-white text-sm">
         </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Exam Time (时间)</label>
-          <input type="time" id="examTime" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2">
+        <div class="space-y-1.5">
+          <label class="block text-[13px] font-medium text-gray-600 ml-1">Time</label>
+          <input type="time" id="examTime" required class="w-full rounded-[14px] bg-gray-50 border border-gray-200 px-4 py-3 text-gray-900 focus:bg-white text-sm">
         </div>
       </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Remarks (备注)</label>
-        <textarea id="remarks" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2" placeholder="e.g. Can't attend the meeting"></textarea>
+      <div class="space-y-1.5">
+        <label class="block text-[13px] font-medium text-gray-600 ml-1">Remarks</label>
+        <textarea id="remarks" rows="2" class="w-full rounded-[14px] bg-gray-50 border border-gray-200 px-4 py-3 text-gray-900 focus:bg-white placeholder-gray-400 text-sm" placeholder="Optional notes..."></textarea>
       </div>
 
-      <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">
-        Submit (提交)
-      </button>
+      <div class="pt-4">
+        <!-- iOS Apple Blue Button -->
+        <button type="submit" id="submitBtn" class="w-full bg-[#007AFF] text-white font-semibold py-3.5 px-4 rounded-[14px] hover:bg-blue-600 active:bg-blue-700 active:scale-[0.98] transition-all duration-200 shadow-sm text-[15px]">
+          Submit
+        </button>
+      </div>
       
-      <p id="statusMsg" class="text-center text-sm font-medium mt-2 hidden"></p>
+      <p id="statusMsg" class="text-center text-[13px] font-medium mt-4 hidden"></p>
     </form>
   </div>
 
   <script>
-    // ⚠️ 替换成你部署出来的 Web App URL ⚠️
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbx9nZ5Pa2qa5HJQlMiiceVAb_FNW---0nvs-Ed-NvdJhLMXkv2H9UBGr5lBCcUUOCGh/exec';
+    // ⚠️ DO NOT remove the single quotes! Replace with your actual URL.
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwMpvE9lgcHoOYf06Nt4e4Fs_1lqAyTVWNUGmm0MtqqUZDAz727S25tAh0L01V4o9iCGQ/exec';
 
     document.getElementById('trackerForm').addEventListener('submit', async function(e) {
       e.preventDefault();
@@ -71,6 +105,7 @@
       
       btn.innerText = 'Submitting...';
       btn.disabled = true;
+      btn.classList.add('opacity-60');
       statusMsg.classList.add('hidden');
 
       const data = {
@@ -83,25 +118,26 @@
       };
 
       try {
-        // 使用 text/plain 避免 CORS preflight 报错
         await fetch(WEB_APP_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(data)
         });
 
-        // 成功后的 UI 更新
-        statusMsg.innerText = '✅ 提交成功！';
-        statusMsg.classList.remove('hidden', 'text-red-600');
+        // Pure English success message
+        statusMsg.innerText = 'Success! Your record has been saved.';
+        statusMsg.classList.remove('hidden', 'text-red-500');
         statusMsg.classList.add('text-green-600');
         document.getElementById('trackerForm').reset();
       } catch (error) {
-        statusMsg.innerText = '❌ 提交失败，请重试。';
+        // Pure English error message
+        statusMsg.innerText = 'Error saving record. Please try again.';
         statusMsg.classList.remove('hidden', 'text-green-600');
-        statusMsg.classList.add('text-red-600');
+        statusMsg.classList.add('text-red-500');
       } finally {
-        btn.innerText = 'Submit (提交)';
+        btn.innerText = 'Submit';
         btn.disabled = false;
+        btn.classList.remove('opacity-60');
       }
     });
   </script>
