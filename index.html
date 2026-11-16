@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meeting & Exam Conflict Tracker</title>
+  <!-- 引入 Tailwind CSS 快速排版 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+  <div class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">🗓️ 考试/冲突记录表</h2>
+    
+    <form id="trackerForm" class="space-y-4">
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Name (姓名)</label>
+        <input type="text" id="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Exam Type (考试类型)</label>
+        <select id="examType" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2">
+          <option value="Test 1">Test 1</option>
+          <option value="Test 2">Test 2</option>
+          <option value="Quiz">Quiz</option>
+          <option value="Final">Final</option>
+          <option value="Others/Retest....">Others/Retest</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Course Code / Subject (科目)</label>
+        <input type="text" id="courseCode" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2">
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Exam Date (日期)</label>
+          <input type="date" id="examDate" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Exam Time (时间)</label>
+          <input type="time" id="examTime" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Remarks (备注)</label>
+        <textarea id="remarks" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 border p-2" placeholder="e.g. Can't attend the meeting"></textarea>
+      </div>
+
+      <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">
+        Submit (提交)
+      </button>
+      
+      <p id="statusMsg" class="text-center text-sm font-medium mt-2 hidden"></p>
+    </form>
+  </div>
+
+  <script>
+    // ⚠️ 替换成你部署出来的 Web App URL ⚠️
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbx9nZ5Pa2qa5HJQlMiiceVAb_FNW---0nvs-Ed-NvdJhLMXkv2H9UBGr5lBCcUUOCGh/exec';
+
+    document.getElementById('trackerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const btn = document.getElementById('submitBtn');
+      const statusMsg = document.getElementById('statusMsg');
+      
+      btn.innerText = 'Submitting...';
+      btn.disabled = true;
+      statusMsg.classList.add('hidden');
+
+      const data = {
+        name: document.getElementById('name').value,
+        examType: document.getElementById('examType').value,
+        courseCode: document.getElementById('courseCode').value,
+        examDate: document.getElementById('examDate').value,
+        examTime: document.getElementById('examTime').value,
+        remarks: document.getElementById('remarks').value
+      };
+
+      try {
+        // 使用 text/plain 避免 CORS preflight 报错
+        await fetch(WEB_APP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(data)
+        });
+
+        // 成功后的 UI 更新
+        statusMsg.innerText = '✅ 提交成功！';
+        statusMsg.classList.remove('hidden', 'text-red-600');
+        statusMsg.classList.add('text-green-600');
+        document.getElementById('trackerForm').reset();
+      } catch (error) {
+        statusMsg.innerText = '❌ 提交失败，请重试。';
+        statusMsg.classList.remove('hidden', 'text-green-600');
+        statusMsg.classList.add('text-red-600');
+      } finally {
+        btn.innerText = 'Submit (提交)';
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
